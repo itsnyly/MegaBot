@@ -31,11 +31,25 @@
     )
 
     (:action pick-up
-        :parameters (?r - robot ?p - package ?below - stackable ?rlocation - location ?s - shelf ?slocation - location)
+        :parameters (?r - robot ?p - package ?below - stackable ?rtop - stackable ?rlocation - location ?s - shelf ?slocation - location)
         :precondition (and  (at ?r ?rlocation) (shelf-at ?s ?slocation) (location-accessible ?rlocation ?slocation) 
-        (clear ?p) (on ?p ?below) (clear ?r))
-        :effect (and (on ?p ?r) (not (clear ?r)) (not (on ?p ?below)) (clear ?below)
+        (clear ?p) (on ?p ?below) (clear ?rtop))
+        :effect (and (on ?p ?rtop) (not (clear ?rtop)) (not (on ?p ?below)) (clear ?below)
          )
+    )
+
+    (:action put-down
+        :parameters (?r - robot ?p - package ?rlocation - location ?s - shelf ?slocation - location ?top - stackable ?below - stackable)
+        :precondition (and (at ?r ?rlocation) (shelf-at ?s ?slocation) (location-accessible ?rlocation ?slocation) 
+        (clear ?top) (on ?p ?below) (clear ?p)
+        )
+        :effect (and (not (on ?p ?below)) (on ?p ?top) (not (clear ?top)) (clear ?below) )
+    )
+    
+    (:action dispense
+        :parameters ()
+        :precondition (and )
+        :effect (and )
     )
     
     
