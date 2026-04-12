@@ -18,10 +18,14 @@
     ;associacio estanteria - casella
         (shelf-at E1 c22)
         (shelf-at E2 c25)
-    ;associacio paquet - estanteria
+    ;a sobre de que esta cada paquet
         (on pkg2 E1)
         (on pkg1 pkg2)
         (on pkg3 E2)
+    ;associacio paquet - estanteria
+        (on-shelf pkg1 E1)
+        (on-shelf pkg2 E1)
+        (on-shelf pkg3 E2)
     ;cims lliures
         (clear pkg1)
         (clear pkg3)

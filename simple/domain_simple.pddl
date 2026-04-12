@@ -13,6 +13,7 @@
         (on ?p - package ?s - stackable) ;un paquet esta sobre d'algun objecte stackable
         (clear ?s - stackable) ;la pila esta buida
         (at ?r - robot ?l - location) ;on es troba el robot
+        (on-shelf ?p - package ?s - shelf) ;un paquet esta sobre una estanteria
         (shelf-at ?s - shelf ?l - location) ;on es troba l'estanteria
         (location-accessible ?l1 - location ?l2 - location) ;si pot arribar
         (is-dispenser ?l - location) ;es un dispensador
@@ -33,17 +34,17 @@
     (:action pick-up
         :parameters (?r - robot ?p - package ?below - stackable ?rtop - stackable ?rlocation - location ?s - shelf ?slocation - location)
         :precondition (and  (at ?r ?rlocation) (shelf-at ?s ?slocation) (location-accessible ?rlocation ?slocation) 
-        (clear ?p) (on ?p ?below) (or (= ?rtop ?r) (on ?rtop ?r)) (clear ?rtop))
-        :effect (and (on ?p ?rtop) (not (clear ?rtop)) (not (on ?p ?below)) (clear ?below)
+        (clear ?p) (on ?p ?below) (or (= ?rtop ?r) (on ?rtop ?r)) (clear ?rtop) (on-shelf ?p ?s))
+        :effect (and (on ?p ?rtop) (not (clear ?rtop)) (not (on ?p ?below)) (clear ?below) (not (on-shelf ?p ?s))
          )
     )
 
     (:action put-down
         :parameters (?r - robot ?p - package ?rlocation - location ?s - shelf ?slocation - location ?top - stackable ?below - stackable)
         :precondition (and (at ?r ?rlocation) (shelf-at ?s ?slocation) (location-accessible ?rlocation ?slocation) 
-        (clear ?top) (on ?p ?below) (clear ?p) (or (= ?below ?r) (on ?below ?r))
+        (clear ?top) (on ?p ?below) (clear ?p) (or (= ?below ?r) (on ?below ?r)) (or (= ?top ?s) (on-shelf ?top ?s)) 
         )
-        :effect (and (not (on ?p ?below)) (on ?p ?top) (not (clear ?top)) (clear ?below) )
+        :effect (and (not (on ?p ?below)) (on ?p ?top) (not (clear ?top)) (clear ?below) (on-shelf ?p ?s)  )
     )
     
     (:action dispense
