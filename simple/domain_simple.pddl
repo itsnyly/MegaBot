@@ -47,9 +47,9 @@
     )
     
     (:action dispense
-        :parameters ()
-        :precondition (and )
-        :effect (and )
+        :parameters (?r - robot ?p - package ?rlocation - location ?d - location ?below - stackable)
+        :precondition (and (at ?r ?rlocation) (is-dispenser ?d) (location-accessible ?rlocation ?d) (clear ?p) (on ?p ?below) )
+        :effect (and (dispensed ?p) (clear ?below) (not (on ?p ?below)) )
     )
     
     
