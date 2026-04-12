@@ -10,15 +10,15 @@
 
     (:predicates
        
-        (on ?p - package ?s - stackable) #un paquet esta sobre d'algun objecte stackable
-        (clear ?s - stackable) #la pila esta buida
-        (at ?r - robot ?l - location) #on es troba el robot
-        (shelf-at ?s - shelf ?l - location) #on es troba l'estanteria
-        (location-accessible ?l1 - location ?l2 - location) #si pot arribar
-        (is-dispenser ?l - location) #es un dispensador
-        (is-shelf ?l - location) #es una estanteria
-        (occupied ?l - location) #hi ha un robot
-        (dispensed ?p - package) #el paquet es troba al dispensador
+        (on ?p - package ?s - stackable) ;un paquet esta sobre d'algun objecte stackable
+        (clear ?s - stackable) ;la pila esta buida
+        (at ?r - robot ?l - location) ;on es troba el robot
+        (shelf-at ?s - shelf ?l - location) ;on es troba l'estanteria
+        (location-accessible ?l1 - location ?l2 - location) ;si pot arribar
+        (is-dispenser ?l - location) ;es un dispensador
+        (is-shelf ?l - location) ;es una estanteria
+        (occupied ?l - location) ;hi ha un robot
+        (dispensed ?p - package) ;el paquet es troba al dispensador
     )
 
     (:action move
@@ -33,7 +33,7 @@
     (:action pick-up
         :parameters (?r - robot ?p - package ?below - stackable ?rtop - stackable ?rlocation - location ?s - shelf ?slocation - location)
         :precondition (and  (at ?r ?rlocation) (shelf-at ?s ?slocation) (location-accessible ?rlocation ?slocation) 
-        (clear ?p) (on ?p ?below) (clear ?rtop))
+        (clear ?p) (on ?p ?below) (or (= ?rtop ?r) (on ?rtop ?r)) (clear ?rtop))
         :effect (and (on ?p ?rtop) (not (clear ?rtop)) (not (on ?p ?below)) (clear ?below)
          )
     )
@@ -41,14 +41,14 @@
     (:action put-down
         :parameters (?r - robot ?p - package ?rlocation - location ?s - shelf ?slocation - location ?top - stackable ?below - stackable)
         :precondition (and (at ?r ?rlocation) (shelf-at ?s ?slocation) (location-accessible ?rlocation ?slocation) 
-        (clear ?top) (on ?p ?below) (clear ?p)
+        (clear ?top) (on ?p ?below) (clear ?p) (or (= ?below ?r) (on ?below ?r))
         )
         :effect (and (not (on ?p ?below)) (on ?p ?top) (not (clear ?top)) (clear ?below) )
     )
     
     (:action dispense
         :parameters (?r - robot ?p - package ?rlocation - location ?d - location ?below - stackable)
-        :precondition (and (at ?r ?rlocation) (is-dispenser ?d) (location-accessible ?rlocation ?d) (clear ?p) (on ?p ?below) )
+        :precondition (and (at ?r ?rlocation) (is-dispenser ?d) (location-accessible ?rlocation ?d) (clear ?p) (on ?p ?below) (or (= ?below ?r) (on ?below ?r)) )
         :effect (and (dispensed ?p) (clear ?below) (not (on ?p ?below)) )
     )
     
