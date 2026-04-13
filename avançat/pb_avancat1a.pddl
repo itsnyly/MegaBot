@@ -1,4 +1,4 @@
-(define (problem pb_avancata) 
+(define (problem pb_avancat1a) 
     (:domain avancat)
     (:objects pkg1 pkg2 pkg3 pkg4 - package
               E1 E2 - shelf
