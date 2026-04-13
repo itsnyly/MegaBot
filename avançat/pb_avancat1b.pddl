@@ -1,5 +1,5 @@
 (define (problem pb_avancat1b) 
-    (:domain avancat)
+    (:domain avancat_ordered)
     (:objects pkg1 pkg2 pkg3 pkg4 - package
               E1 E2 - shelf
               c11 c12 c13 c14 c15 c16 - location
@@ -52,8 +52,8 @@
         (= (max-battery R2) 50)
         (= (current-load R1) 0)
         (= (current-load R2) 0)
-        (= (max-load R1) 10)
-        (= (max-load R2) 10)
+        (= (max-load R1) 8)
+        (= (max-load R2) 8)
         (= (total-energy-used) 0)
     ;accessibilitat entre caselles
         (location-accessible c11 c12)
@@ -100,13 +100,18 @@
         (location-accessible c64 c54)
         (location-accessible c65 c64)
         (location-accessible c65 c66)
+    ; ordre de dispensacio (pkg1 -> pkg2 -> pkg3 -> pkg4)
+        (next-to-dispense pkg1)
+        (dispense-order pkg1 pkg2)
+        (dispense-order pkg2 pkg3)
+        (dispense-order pkg3 pkg4)
     )
 
     (:goal (and
         (dispensed pkg1)
         (dispensed pkg2)
         (dispensed pkg3)
-        (not (dispensed pkg4))
+        (dispensed pkg4)
     ))
 
     (:metric minimize (total-energy-used))
