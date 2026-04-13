@@ -106,6 +106,7 @@
         (dispensed pkg1)
         (dispensed pkg2)
         (dispensed pkg3)
+        (not (dispensed pkg4))
     ))
 
     (:metric minimize (total-energy-used))
