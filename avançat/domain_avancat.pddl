@@ -23,11 +23,20 @@
         (dispensed ?p - package) ;el paquet es troba al dispensador
     )
 
+    (:functions
+        (battery ?r - robot) ;nivell de bateria del robot
+        (max-battery ?r - robot) ;capacitat maxima de bateria del robot
+        (weight ?p - package) ;pes del paquet
+        (current-load ?r - robot) ;pes total que porta el robot
+        (max-load ?r - robot) ;capacitat maxima de càrrega
+        (total-energy-used) ;metrica a minimitzar
+    )
+
     (:action move
         :parameters (?r - robot ?from - location ?to - location)
         :precondition (and (location-accessible ?from ?to) (at ?r ?from) (not (is-dispenser ?to)) 
-         (not (is-shelf ?to))(not (occupied ?to)) (or (and (< (current-load ?r) 5) (>= (battery ?r) 2)) (and (>= current-load ?r) 5) (>= (battery ?r) 3))
-         )
+         (not (is-shelf ?to))(not (occupied ?to)) (or (and (< (current-load ?r) 5) (>= (battery ?r) 2)) (and (>= (current-load ?r) 5) (>= (battery ?r) 3))
+         ))
         :effect (and (occupied ?to) (not (occupied ?from)) (at ?r ?to) (not (at ?r ?from)) 
             (when (< (current-load ?r) 5) (and (decrease (battery ?r) 2) (increase (total-energy-used) 2)))
             (when (>= (current-load ?r) 5) (and (decrease (battery ?r) 3) (increase (total-energy-used) 3)))
@@ -66,16 +75,4 @@
         :precondition (and (at ?r ?rlocation) (is-dispenser ?d) (location-accessible ?rlocation ?d) (clear ?p) (on ?p ?below) (or (= ?below ?r) (on ?below ?r)) )
         :effect (and (dispensed ?p) (clear ?below) (not (on ?p ?below)) )
     )
-    
-    (:functions
-        (battery ?r - robot) ;nivell de bateria del robot
-        (max-battery ?r - robot) ;capacitat maxima de bateria del robot
-        (weight ?p - package) ;pes del paquet
-        (current-load ?r - robot) ;pes total que porta el robot
-        (max-load ?r - robot) ;capacitat maxima de càrrega
-        (total-energy-used) ;metrica a minimitzar
-    )
-    
-
-
 )
